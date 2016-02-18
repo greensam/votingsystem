@@ -10,7 +10,7 @@ class Candidate(db.Model):
 	name = db.Column(db.String(64))
 	votes = db.relationship('Vote', backref='candidate', lazy='dynamic')
 
-	__table_args__ = (UniqueConstraint('name','id',name='_id_name_uc'),)
+	__table_args__ = (UniqueConstraint('name',name='_name_uc'),)
 
 	def __repr__(self):
 		return '<Candidate {0}>'.format(self.name)
