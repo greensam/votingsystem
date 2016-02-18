@@ -92,7 +92,6 @@ def setup_vote():
 	current = Candidate.query.one_or_none()
 
 	if request.method == 'GET':
-		print current
 		return render_template('vote_setup_form.html', current = current)
 	else:
 		if 'name' in request.form and not request.form['name'] is None:
@@ -121,8 +120,8 @@ def setup_vote():
 @app.route('/resetvote/', methods=['GET'])
 @admin_required
 def reset_vote():
-	Candidate.query.delete()
 	Vote.query.delete()
+	Candidate.query.delete()
 
 	try:
 		db.session.commit()
@@ -151,7 +150,6 @@ def vote():
 			db.session.commit()
 			flash("Vote of {0} cast for {1}, using voter name {2}".format(vote.vote, current.name, vote.voter))
 		except Exception as e:
-			print e
 			flash("DB Error")
 
 	return redirect(url_for('vote'))
@@ -172,13 +170,10 @@ def results():
 
 		formula = get_formula(candidate.rnd)
 
-		print total
 		if total > 0:
 			result = formula(yes_count, no_count, abstain_count)
 		else:
 			result = None
-
-		print "RESULT", result
 
 		return render_template('results.html',\
 			candidate=candidate, votes=counts, voters=voters, \
