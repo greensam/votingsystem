@@ -1,0 +1,17 @@
+.flash {
+	text-align: center;
+}
+
+.form {
+	width: 30%;
+	margin: 0 auto;
+}
+
+.results{
+	width: 40%;
+	margin: 0 auto;
+}
+
+.table th {
+	text-align: center;
+}

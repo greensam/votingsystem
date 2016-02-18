@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class='container'>
+<h3 class='text-center'>Cast a Vote</h3>
+{% if current %}
+<h4 class='text-center'>Currently voting on: {{current.name}}</h4>
+<form method='post' class='form'>
+	<div class='form-group'>
+		<label for="voter">Your Name</label>
+		<input class='form-control' type='text' name='voter'/>
+		
+		<label for='vote'>Your Vote</label>
+		<select class='form-control' name='vote'>
+			<option>Abstain</option>
+			<option>Yes</option>
+			<option>No</option>
+		</select>
+	</div>
+	<div class='form-group text-center'>
+	<button class='btn btn-danger'>Submit</button>
+	</div>
+</form>
+{% else %}
+<div class='text-center'>
+No vote currently active
+</div>
+{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class='container text-center'>
+<h3> Vote Results (Current) </h3>
+<h4>Currently voting on: {{candidate.name}}</h4>
+<h4>Total Votes Cast: {{votes.total}}</h4>
+<h4>Current Result: {{result}} based on {{round}} voting formula.</h4>
+
+<div class='results'>
+<table class='table'>
+<tr><th>Yes</th><th>No</th><th>Abstain</th></tr>
+<tr><td>{{votes.yes}}</td><td>{{votes.no}}</td><td>{{votes.abstain}}</td></tr>
+</table>
+</div>
+</div>
+
+<div class='text-center'>
+<h4>Voters</h4>
+{% for voter in voters %}
+<p>{{voter}}</p>
+{% endfor %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head> 
+  <title>Voting</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
+  <!-- Global CSS -->
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/bootstrap.css') }}">
+  <link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/styles.css') }}">
+
+  <!-- Global JavaScripts -->
+  <script src="{{ url_for('static', filename='js/jquery-1.11.3.js' ) }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+</head>
+<body>
+<div class="page container">
+  {% if not (session.logged_in or session.admin)%}
+  <ul class="nav nav-tabs" id="navigation">
+    <li role="presentation"><a href="{{url_for('login')}}">Log in</a></li>
+    <li role="presentation"><a href="{{url_for('admin_login')}}">Admin Login </a></li>
+  </ul>
+  {% else %}
+  <h1>The Oak Club <small>Deliberations Voting System</small></h1>
+  <ul class="nav nav-tabs" id="navigation">
+    {% if session.admin %}
+    <li role="presentation"><a href="{{url_for('setup_vote')}}">Vote Settings</a></li>
+    <li role="presentation"><a href="{{url_for('results')}}">View Results</a></li>
+    {% endif %}
+    <li role="presentation"><a href="{{url_for('vote')}}">Cast Vote</a></li>
+    <li role="presentation"><a href="{{url_for('logout')}}">Log out</a></li>
+  </ul>
+  {% endif %}
+
+  {% for message in get_flashed_messages() %}
+    <div class=flash>{{ message }}</div>
+  {% endfor %}
+  {% block body %}{% endblock %}
+</div>
+</body>
+</html>
