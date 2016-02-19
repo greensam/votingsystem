@@ -131,6 +131,43 @@ def reset_vote():
 
 	return redirect(url_for('setup_vote'))
 
+@app.route('/activate/')
+@admin_required
+def activate():
+	current = Candidate.query.one_or_none()
+
+	if current is None:
+		flash("Create a vote first.")
+		return redirect(url_for('setup_vote'))
+
+	else:
+		current.active = True
+		try:
+			db.session.commit()
+			flash("Vote now active.")
+		except:
+			flash("Database error.")
+
+	return redirect(url_for('vote'))
+
+@app.route('/deactivate')
+@admin_required
+def deactivate():
+	current = Candidate.query.one_or_none()
+
+	if current is None:
+		flash("No vote is currently active.")
+		return redirect(url_for('setup_vote'))
+	else:
+		current.active = False
+		try:
+			db.session.commit()
+			flash("Vote now paused.")
+		except:
+			flash("Database error.")
+
+	return redirect(url_for('results'))
+
 @app.route('/vote/', methods=['GET', 'POST'])
 @login_required
 def vote():
@@ -140,17 +177,20 @@ def vote():
 	if request.method == 'GET':
 		return render_template('vote_form.html', current=current)
 	else:
-		vote = request.form['vote']
-		voter = request.form['voter']
+		if current.active:
+			vote = request.form['vote']
+			voter = request.form['voter']
 
-		vote = Vote(vote=vote, voter=voter, candidate = current)
+			vote = Vote(vote=vote, voter=voter, candidate = current)
 
-		try:
-			db.session.add(vote)
-			db.session.commit()
-			flash("Vote of {0} cast for {1}, using voter name {2}".format(vote.vote, current.name, vote.voter))
-		except Exception as e:
-			flash("DB Error")
+			try:
+				db.session.add(vote)
+				db.session.commit()
+				flash("Vote of {0} cast for {1}, using voter name {2}".format(vote.vote, current.name, vote.voter))
+			except Exception as e:
+				flash("DB Error")
+		else:
+			flash("No vote was active when your vote was received. Tell someone about this if this was an error.")
 
 	return redirect(url_for('vote'))
 

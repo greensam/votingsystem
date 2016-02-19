@@ -9,7 +9,7 @@ class Candidate(db.Model):
 	rnd = db.Column(db.String(64))
 	name = db.Column(db.String(64), unique=True)
 	votes = db.relationship('Vote', backref='candidate', lazy='dynamic')
-
+	active = db.Column(db.Boolean, nullable=False, default=False)
 	__table_args__ = (UniqueConstraint('name'),)
 
 	def __repr__(self):
