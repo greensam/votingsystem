@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% block body %}
+<div class='container text-center'>
+<div class='results'>
+<table class='table'>
+<tr><th>Voter</th><th>Aidan</th><th>Joe</th><th>Nolan</th><th>Jeremy</th></tr>
+{% for vote in votes %}
+<tr><td>{{vote.voter}}</td><td>{{vote.aidan}}</td><td>{{vote.joe}}</td><td>{{vote.nolan}}</td><td>{{vote.jeremy}}</td></tr>
+{% endfor %}
+<tr><td>Totals ({{n}} votes) </td><td>{{aidan}}</td><td>{{joe}}</td><td>{{nolan}}</td><td>{{jeremy}}</td></tr>	
+</table>
+</div>
+</div>
+
+{% endblock %}

@@ -77,6 +77,40 @@ def admin_login():
 
 	return redirect(url_for('vote'))
 
+from models import FallVote
+@app.route('/fall/',methods=['GET', 'POST'])
+@login_required
+def fall_vote():
+
+	if request.method == 'POST':
+
+		v = FallVote(voter=request.form.get('voter'),
+					joe=(request.form.get('joe') == 'on'),
+					nolan=(request.form.get('nolan') == 'on'),
+					jeremy=(request.form.get('jeremy') == 'on'),
+					aidan=(request.form.get('aidan') == 'on'))
+		try:
+			db.session.add(v)
+			db.session.commit()
+			flash("Thanks for voting. Your vote has been received.")
+		except Exception as e:
+			print e
+			flash("Your vote failed. Have you already voted?")
+
+	return render_template('fall_vote.html')
+
+@app.route('/fall_results/', methods=['GET'])
+@admin_required
+def fall_results():
+
+	votes = FallVote.query.all()
+	jeremy = sum(map(lambda s : s.jeremy, votes))
+	nolan = sum(map(lambda s : s.nolan, votes))
+	joe = sum(map(lambda s : s.joe, votes))
+	aidan = sum(map(lambda s : s.aidan, votes))
+
+	return render_template('fall_results.html', n=len(votes), votes=votes, jeremy=jeremy, joe=joe, nolan=nolan, aidan=aidan)
+
 
 @app.route('/logout/',methods=['GET'])
 def logout():
@@ -102,6 +136,9 @@ def setup_vote():
 				Candidate.query.delete()
 				Vote.query.delete()
 
+				# TODO
+				# FIX SO THAT UPDATES WITHOUT RESETS DON'T CRASH THE DB.
+
 				new_c = Candidate(name=name, rnd=rnd)
 
 				try:
@@ -122,6 +159,7 @@ def setup_vote():
 def reset_vote():
 	Vote.query.delete()
 	Candidate.query.delete()
+	FallVote.query.delete()
 
 	try:
 		db.session.commit()
