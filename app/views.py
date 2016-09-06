@@ -96,6 +96,7 @@ def fall_vote():
 		except Exception as e:
 			print e
 			flash("Your vote failed. Have you already voted?")
+			db.session.rollback()
 
 	return render_template('fall_vote.html')
 
