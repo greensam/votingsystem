@@ -32,7 +32,7 @@ def login_required(f):
 	def decorated(*args, **kwargs):
 		if (not 'admin' in session or not session['admin']) \
 			and (not 'logged_in' in session or not session['logged_in']):
-			return redirect(url_for('index'))
+			return redirect(url_for('fall_vote'))
 		return f(*args, **kwargs)
 	return decorated
 
